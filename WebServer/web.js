@@ -15,7 +15,7 @@ function reqHandler(req, res){
         getHomePage(req, res);
     }
 
-    if(req.url.endswith(".html") && req.method === "GET"){
+    if(req.url.endsWith(".html") && req.method === "GET"){
         try{
             getRequestedPage(req,res);
         }
