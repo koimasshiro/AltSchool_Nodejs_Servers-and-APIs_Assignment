@@ -6,6 +6,9 @@ const itemsPath = path.join(__dirname, "items.json");
 
 const PORT = 4000;
 
+
+//--------Request Handlers------------------------
+
 function reqHandlers(req, res) {
     if (req.url === "/items" && req.method === "POST") {
         postItems(req, res);
@@ -90,7 +93,8 @@ function getOneItem(req, res) {
     });
 
     if (itemIndex == -1) {
-        clientError();
+        res.writeHead(404);
+        res.end("Item not found");
     }
     res.end(JSON.stringify(arrayOfObj[itemIndex]));
 }
@@ -100,7 +104,7 @@ function getOneItem(req, res) {
 //Update an Item
 
 function updateItem(req, res) {
-    const id = req.url("/")[2];
+    const id = req.url.split("/")[2];
 
     const items = fs.readFileSync(itemsPath);
     const arrayOfObj = JSON.parse(items);
@@ -115,16 +119,17 @@ function updateItem(req, res) {
         const update = JSON.parse(parsedBody);
 
         const indexItem = arrayOfObj.findIndex((item)=> {
-            return item.id === parseInt(id);
+            return item.id === id;
         });
 
         if(indexItem == -1){
+            res.writeHead(404);
             res.end("Item not found");
         }
 
         arrayOfObj[indexItem] = {...arrayOfObj[indexItem], ...update};
 
-        fs.writeFile(itemsPath. JSON.stringify(arrayOfObj), (err)=> {
+        fs.writeFile(itemsPath, JSON.stringify(arrayOfObj), (err)=> {
             if(err){
                 serverError();
             }
@@ -137,7 +142,28 @@ function updateItem(req, res) {
 //Delete an Item
 
 function deleteItem(req, res){
-    const id = req.url
+    const id = req.url.split("/")[2];
+
+    const items = fs.readFileSync(itemsPath);
+    const arrayOfObj = JSON.parse(items);
+
+    const indexItem = arrayOfObj.findIndex((item)=>{
+        return item.id === id;
+    });
+
+    if (indexItem == -1){
+        res.writeHead(404);
+        res.end("Item not found");
+    }
+
+    arrayOfObj.splice(indexItem, 1);
+
+    fs.writeFile(itemsPath, JSON.stringify(arrayOfObj), (err)=>{
+        if(err){
+            serverError();
+        }
+        res.end("Item deleted successfully");
+    })
 }
 
 
@@ -148,7 +174,3 @@ function serverError() {
     res.end("Internal Server Error");
 }
 
-function clientError() {
-    res.writeHead("404");
-    res.end("Item not found");
-}

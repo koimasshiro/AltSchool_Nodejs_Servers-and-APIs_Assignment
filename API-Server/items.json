@@ -1,1 +1,20 @@
-[{"name":"Fenty Lip gloss","price":"$350","size":"small","id": "0"},{"name":"Gucci heels","price":"$500","size":"medium","id":"46"}]
+[
+    {
+        "name": "Fendi Hand bag",
+        "price": "$350",
+        "size": "large",
+        "id": "0"
+    },
+    {
+        "name": "Louis Vuitton",
+        "price": "$1357",
+        "size": "medium",
+        "id": "222"
+    },
+    {
+        "name": "Balenciaga boots",
+        "price": "$2447",
+        "size": "small",
+        "id": "418"
+    }
+]
